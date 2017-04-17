@@ -16,7 +16,7 @@ public class TextReader {
 
     private void fillIgnoreChars() throws FileNotFoundException {
         String line;
-        buffReader = new BufferedReader(new FileReader("ignorecharsdic"));
+        buffReader = new BufferedReader(new FileReader("IgnoreList"));
         ignorechars = new ArrayList<>(1000);
         try{
             while((line = buffReader.readLine()) != null) {

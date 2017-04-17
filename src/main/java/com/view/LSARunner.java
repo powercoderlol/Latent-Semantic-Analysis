@@ -1,11 +1,13 @@
 package main.java.com.view;
 
+
 import main.java.com.controller.utils.TextReader;
 import main.java.com.controller.DataController;
-import main.java.com.controller.utils.DataContainer;
+import main.java.com.data.DataContainer;
 
 import java.io.File;
 import java.io.IOException;
+import main.java.com.algo.PortersStemming;
 
 /**
  * Created by Ivan on 16.04.2017.
@@ -17,15 +19,17 @@ public class LSARunner {
     }
 
     private void run() {
-        DataContainer currDataContainer;
         DataController currDataInput = new DataController();
         String line;
         try{
             TextReader tr = new TextReader( new File("Deutschland.txt"));
             while( (line = tr.next()) != "") {
-                //currDataInput.FillData(line, 0);
+                line = PortersStemming.stem(line);
+                currDataInput.FillData(line);
             }
             currDataInput.setCurrData();
+            currDataInput.updateView();
+
 
         } catch (IOException e) {
             e.printStackTrace();

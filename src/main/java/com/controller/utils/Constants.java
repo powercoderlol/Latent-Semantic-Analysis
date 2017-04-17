@@ -5,6 +5,6 @@ package main.java.com.controller.utils;
  */
 public class Constants {
 
-    public static String delimiters = " !,?;:_()[]$-@~/*#&\"";
+    public static String delimiters = " !,?;:_()[]$-@~/*#&\".%»«";
 
 }
