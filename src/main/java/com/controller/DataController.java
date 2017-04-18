@@ -17,7 +17,8 @@ public class DataController {
     private int TextOrder;
 
     public DataController() {
-
+        StoredDataAllTextEntries = new HashMap<>();
+        StoredDataParagraphEntries = new HashMap<>();
 
 
         ContainerData = new DataContainer();
@@ -26,44 +27,61 @@ public class DataController {
 
     public void addDataFullText(String token) {
         Integer value;
-        value = this.StoredDataAllTextEntries.get(token);
+        value = StoredDataAllTextEntries.get(token);
 
         if (value != null) {
-            this.StoredDataAllTextEntries.put(token, this.StoredDataAllTextEntries.get(token) + 1);
+            StoredDataAllTextEntries.put(token, StoredDataAllTextEntries.get(token) + 1);
         } else {
-            this.StoredDataAllTextEntries.put(token, 1);
+            StoredDataAllTextEntries.put(token, 1);
         }
     }
 
-    /*
-    public void FillDataParagraph(String token, int order) {
 
-        if(this.StoredDataParagraphEntries.get(token) != null) {
-            this.StoredDataParagraphEntries.put(token, this.StoredDataParagraphEntries.get(token).)
+    public void addDataParagraph(String token, int order) {
+
+        StoredDataParagraphEntries.computeIfAbsent(token, key -> new ArrayList<>());
+
+
+        if(StoredDataParagraphEntries.get(token).size() == 0) {
+            for(int i= 0; i < order; i++) {
+                StoredDataParagraphEntries.get(token).add(0, 0);
+            }
         } else {
-
+            int currVal = StoredDataParagraphEntries.get(token).get(order);
+            StoredDataParagraphEntries.put(token, StoredDataParagraphEntries.get(token)).add(order, currVal + 1);
         }
     }
-    */
+
 
     public void setCurrDataFullText(DataContainer ContainerData) {
         this.ContainerData = ContainerData;
     }
 
     public void setCurrDataFullText(HashMap<String, Integer> StoredData) {
-        this.ContainerData.setDataAllTextEntries(StoredData);
-        this.StoredDataAllTextEntries = StoredData;
+        ContainerData.setDataAllTextEntries(StoredData);
+        StoredDataAllTextEntries = StoredData;
     }
 
     public void setCurrDataFullText() {
-        this.ContainerData.setDataAllTextEntries(this.StoredDataAllTextEntries);
+        ContainerData.setDataAllTextEntries(StoredDataAllTextEntries);
     }
 
-    public void setCurrView(DataPrinter ContainerPrinter) { this.ContainerPrinter = ContainerPrinter; }
+    public void setCurrDataParagraphs(HashMap<String, ArrayList<Integer>> StoredData) {
+        ContainerData.setStoredDataParagraphEntries(StoredData);
+    }
 
+    public void setCurrDataParagraphs() {
+        ContainerData.setStoredDataParagraphEntries(StoredDataParagraphEntries);
+    }
+
+    //public void setCurrView(DataPrinter ContainerPrinter) { this.ContainerPrinter = ContainerPrinter; }
 
     public void printMatrixFullText() {
-        ContainerPrinter.printContainer(this.ContainerData.getDataAllTextEntries());
+        ContainerPrinter.printContainerFullText(ContainerData.getDataFullTextEntries());
+    }
+
+    public void printMatrixParagraph() {
+        ContainerPrinter.printContainerParagraph(ContainerData.getStoredDataParagraphEntries());
     }
 
 }

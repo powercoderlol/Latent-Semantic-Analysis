@@ -21,11 +21,23 @@ public class LSARunner {
         String line;
         try{
             TextReader tr = new TextReader( new File("DeutschlandNoun.txt"));
-            while( !(line = tr.nextSpec()).equals("")) {
+
+            while( !(line = tr.next()).equals("")) {
                 currDataInput.addDataFullText(line);
             }
-            currDataInput.setCurrDataFullText();
-            currDataInput.printMatrixFullText();
+
+            tr.openFile( new File("DeutschlandNoun.txt"));
+
+            while( !(line = tr.nextParagraphToken()).equals("")) {
+                int count = tr.getParagraphCounter();
+                currDataInput.addDataParagraph(line, count);
+            }
+
+
+            currDataInput.setCurrDataParagraphs();
+            currDataInput.printMatrixParagraph();
+            //currDataInput.setCurrDataFullText();
+            //currDataInput.printMatrixFullText();
 
 
         } catch (IOException e) {

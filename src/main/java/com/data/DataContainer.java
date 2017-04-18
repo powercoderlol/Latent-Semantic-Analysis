@@ -1,6 +1,7 @@
 package main.java.com.data;
 
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -17,16 +18,26 @@ public class DataContainer {
         StoredDataParagraphEntries = new HashMap<>();
     }
 
+    /*
     public DataContainer(HashMap<String, Integer > data) {
         StoredDataAllTextEntries = data;
     }
+    */
 
     public void setDataAllTextEntries(HashMap<String, Integer > InputStoredData) {
         StoredDataAllTextEntries = InputStoredData;
     }
 
-    public HashMap<String, Integer> getDataAllTextEntries() {
+    public void setStoredDataParagraphEntries(HashMap<String, ArrayList<Integer>> InputStoredData) {
+        StoredDataParagraphEntries = InputStoredData;
+    }
+
+    public HashMap<String, Integer> getDataFullTextEntries() {
         return StoredDataAllTextEntries;
+    }
+
+    public HashMap<String, ArrayList<Integer>> getStoredDataParagraphEntries() {
+        return StoredDataParagraphEntries;
     }
 
 }

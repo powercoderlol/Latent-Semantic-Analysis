@@ -9,18 +9,33 @@ import java.util.StringTokenizer;
  * Created by Ivan on 16.04.2017.
  */
 public class TextReader {
-    private static List<String> ignorechars;
+    private static List<String> ignoreChars;
     private BufferedReader buffReader;
     private StringTokenizer stringTokenizer;
     private boolean eof;
+    private int paragraphCounter;
+
+    public TextReader(File currentfile) throws FileNotFoundException {
+        paragraphCounter = -1;
+        fillIgnoreChars();
+        buffReader = new BufferedReader(new FileReader(currentfile));
+        eof = false;
+    }
+
+    public boolean openFile(File currentfile) throws FileNotFoundException {
+        paragraphCounter = -1;
+        buffReader = new BufferedReader((new FileReader(currentfile)));
+        eof = false;
+        return true;
+    }
 
     private void fillIgnoreChars() throws FileNotFoundException {
         String line;
         buffReader = new BufferedReader(new FileReader("IgnoreList"));
-        ignorechars = new ArrayList<>(1000);
+        ignoreChars = new ArrayList<>(1000);
         try{
             while((line = buffReader.readLine()) != null) {
-                ignorechars.add(line);
+                ignoreChars.add(line);
             }
             buffReader.close();
         } catch(IOException e) {
@@ -34,6 +49,7 @@ public class TextReader {
             try {
                 line = buffReader.readLine();
                 line = line.toLowerCase();
+                stringTokenizer = new StringTokenizer(line);
             } catch (Exception e) {
                 eof = true;
                 return "";
@@ -56,13 +72,33 @@ public class TextReader {
             }
         }
         line = stringTokenizer.nextToken();
-        return ignorechars.contains(line)? nextSpecToken() : line;
+        return ignoreChars.contains(line)? nextSpecToken() : line;
     }
 
-    public TextReader(File currentfile) throws FileNotFoundException {
-        fillIgnoreChars();
-        buffReader = new BufferedReader(new FileReader(currentfile));
-        eof = false;
+    private String readParagraphPerLine() {
+        String line;
+        try {
+            if (stringTokenizer == null || !stringTokenizer.hasMoreTokens()) {
+                paragraphCounter++;
+                line = buffReader.readLine();
+                stringTokenizer = new StringTokenizer(line);
+                return stringTokenizer.nextToken();
+            } else {
+                return stringTokenizer.nextToken();
+            }
+        } catch (Exception e) {
+            paragraphCounter = -1;
+            eof = true;
+            return "";
+        }
+    }
+
+    public int getParagraphCounter() {
+        return paragraphCounter;
+    }
+
+    public String nextParagraphToken() {
+        return readParagraphPerLine();
     }
 
     public String nextSpec() {
