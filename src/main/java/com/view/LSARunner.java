@@ -3,11 +3,9 @@ package main.java.com.view;
 
 import main.java.com.controller.utils.TextReader;
 import main.java.com.controller.DataController;
-import main.java.com.data.DataContainer;
 
 import java.io.File;
 import java.io.IOException;
-import main.java.com.algo.PortersStemming;
 
 /**
  * Created by Ivan on 16.04.2017.
@@ -22,13 +20,12 @@ public class LSARunner {
         DataController currDataInput = new DataController();
         String line;
         try{
-            TextReader tr = new TextReader( new File("Deutschland.txt"));
-            while( (line = tr.next()) != "") {
-                line = PortersStemming.stem(line);
-                currDataInput.FillData(line);
+            TextReader tr = new TextReader( new File("DeutschlandNoun.txt"));
+            while( !(line = tr.nextSpec()).equals("")) {
+                currDataInput.addDataFullText(line);
             }
-            currDataInput.setCurrData();
-            currDataInput.updateView();
+            currDataInput.setCurrDataFullText();
+            currDataInput.printMatrixFullText();
 
 
         } catch (IOException e) {

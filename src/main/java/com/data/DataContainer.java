@@ -8,23 +8,25 @@ import java.util.HashMap;
  * Created by Ivan on 16.04.2017.
  */
 public class DataContainer {
-    private HashMap<String, Integer > StoredData;
+    private HashMap<String, Integer > StoredDataAllTextEntries;
+    private HashMap< String, ArrayList< Integer > > StoredDataParagraphEntries;
 
 
     public DataContainer() {
-        StoredData = new HashMap<>();
+        StoredDataAllTextEntries = new HashMap<>();
+        StoredDataParagraphEntries = new HashMap<>();
     }
 
     public DataContainer(HashMap<String, Integer > data) {
-        StoredData = data;
+        StoredDataAllTextEntries = data;
     }
 
-    public void setData(HashMap<String, Integer > InputStoredData) {
-        StoredData = InputStoredData;
+    public void setDataAllTextEntries(HashMap<String, Integer > InputStoredData) {
+        StoredDataAllTextEntries = InputStoredData;
     }
 
-    public HashMap<String, Integer> getData() {
-        return StoredData;
+    public HashMap<String, Integer> getDataAllTextEntries() {
+        return StoredDataAllTextEntries;
     }
 
 }

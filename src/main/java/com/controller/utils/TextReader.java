@@ -28,6 +28,21 @@ public class TextReader {
         }
     }
 
+    private String nextToken() {
+        String line;
+        while( stringTokenizer == null || !stringTokenizer.hasMoreTokens()) {
+            try {
+                line = buffReader.readLine();
+                line = line.toLowerCase();
+            } catch (Exception e) {
+                eof = true;
+                return "";
+            }
+        }
+        line = stringTokenizer.nextToken();
+        return line;
+    }
+
     private String nextSpecToken() {
         String line;
         while( stringTokenizer == null || !stringTokenizer.hasMoreTokens()) {
@@ -50,14 +65,27 @@ public class TextReader {
         eof = false;
     }
 
-    public String next() {
+    public String nextSpec() {
         return nextSpecToken();
     }
 
-    public String readAll() {
+    public String next() {
+        return nextToken();
+    }
+
+    public String readFullText() {
         String s = "";
-        while( eof == false) {
+        while(!eof) {
             s += next() + " ";
+        }
+        return s;
+    }
+
+
+    public String readFullTextSpec() {
+        String s = "";
+        while(!eof) {
+            s += nextSpec() + " ";
         }
         return s;
     }
