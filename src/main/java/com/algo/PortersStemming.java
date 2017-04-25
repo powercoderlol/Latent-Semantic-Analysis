@@ -1,4 +1,4 @@
-package main.java.com.algo;
+package com.algo;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

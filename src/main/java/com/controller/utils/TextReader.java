@@ -1,4 +1,4 @@
-package main.java.com.controller.utils;
+package com.controller.utils;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -91,6 +91,22 @@ public class TextReader {
             eof = true;
             return "";
         }
+    }
+
+    public int getParagraphOrder(String filename) {
+        int order = 0;
+        String currLine;
+        try {
+            if (openFile(new File(filename))) {
+                while( (currLine = buffReader.readLine()) != null) {
+                    order++;
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return order;
     }
 
     public int getParagraphCounter() {

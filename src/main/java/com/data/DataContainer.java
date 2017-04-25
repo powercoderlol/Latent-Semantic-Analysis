@@ -1,4 +1,4 @@
-package main.java.com.data;
+package com.data;
 
 
 import java.lang.reflect.Array;
@@ -10,7 +10,7 @@ import java.util.HashMap;
  */
 public class DataContainer {
     private HashMap<String, Integer > StoredDataAllTextEntries;
-    private HashMap< String, ArrayList< Integer > > StoredDataParagraphEntries;
+    private HashMap< String, int[] > StoredDataParagraphEntries;
 
 
     public DataContainer() {
@@ -18,17 +18,11 @@ public class DataContainer {
         StoredDataParagraphEntries = new HashMap<>();
     }
 
-    /*
-    public DataContainer(HashMap<String, Integer > data) {
-        StoredDataAllTextEntries = data;
-    }
-    */
-
     public void setDataAllTextEntries(HashMap<String, Integer > InputStoredData) {
         StoredDataAllTextEntries = InputStoredData;
     }
 
-    public void setStoredDataParagraphEntries(HashMap<String, ArrayList<Integer>> InputStoredData) {
+    public void setStoredDataParagraphEntries(HashMap<String, int[]> InputStoredData) {
         StoredDataParagraphEntries = InputStoredData;
     }
 
@@ -36,7 +30,7 @@ public class DataContainer {
         return StoredDataAllTextEntries;
     }
 
-    public HashMap<String, ArrayList<Integer>> getStoredDataParagraphEntries() {
+    public HashMap<String, int[]> getStoredDataParagraphEntries() {
         return StoredDataParagraphEntries;
     }
 

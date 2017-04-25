@@ -1,25 +1,37 @@
-package main.java.com.controller;
+package com.controller;
 
-import main.java.com.data.DataContainer;
-import main.java.com.view.utils.DataPrinter;
+import com.data.DataContainer;
+import com.view.utils.DataPrinter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
+import org.ejml.data.DenseMatrix64F;
+import org.ejml.simple.SimpleMatrix;
+import org.ejml.simple.SimpleSVD;
+
+import org.ejml.alg.dense.decomposition.svd.SvdImplicitQrDecompose_D64;
+import org.ejml.data.DenseMatrix64F;
 
 /**
  * Created by Ivan on 17.04.2017.
  */
 public class DataController {
     private HashMap<String, Integer > StoredDataAllTextEntries;
-    private HashMap<String, ArrayList<Integer> > StoredDataParagraphEntries;
+    private HashMap<String, int[] > StoredDataParagraphEntries;
     private DataContainer ContainerData;
     private DataPrinter ContainerPrinter;
-    private int TextOrder;
+    private int paragraphOrder;
+    private int keyValueMappings;
+    double[] MainMatrix;
+
 
     public DataController() {
         StoredDataAllTextEntries = new HashMap<>();
         StoredDataParagraphEntries = new HashMap<>();
-
+        paragraphOrder = 0;
 
         ContainerData = new DataContainer();
         ContainerPrinter = new DataPrinter();
@@ -36,22 +48,47 @@ public class DataController {
         }
     }
 
-
-    public void addDataParagraph(String token, int order) {
-
-        StoredDataParagraphEntries.computeIfAbsent(token, key -> new ArrayList<>());
-
-
-        if(StoredDataParagraphEntries.get(token).size() == 0) {
-            for(int i= 0; i < order; i++) {
-                StoredDataParagraphEntries.get(token).add(0, 0);
-            }
-        } else {
-            int currVal = StoredDataParagraphEntries.get(token).get(order);
-            StoredDataParagraphEntries.put(token, StoredDataParagraphEntries.get(token)).add(order, currVal + 1);
-        }
+    public void addDataParagraph(String token, int currOrder) {
+        addDataParagraphOrder(token);
+        StoredDataParagraphEntries.get(token)[currOrder]++;
     }
 
+    private void convertDataParagraphIntoMatrix() {
+
+        keyValueMappings = StoredDataParagraphEntries.size();
+        MainMatrix = new double[paragraphOrder*keyValueMappings];
+        Iterator matrixIter = StoredDataParagraphEntries.entrySet().iterator();
+        for(int i = 0; (i < keyValueMappings) && matrixIter.hasNext(); i++) {
+            HashMap.Entry pair = (HashMap.Entry)matrixIter.next();
+            for(int j = 0; j < paragraphOrder; j++) {
+                int arr[] = (int[])pair.getValue();
+                MainMatrix[i] = arr[j];
+            }
+        }
+        //DenseMatrix64F matr = new DenseMatrix64F(keyValueMappings,paragraphOrder,true,MainMatrix);
+        //matr.print();
+    }
+
+    public double[] getMatrixAlgoData() {
+        convertDataParagraphIntoMatrix();
+        return MainMatrix;
+    }
+
+    public int getMatrixAlgoCols() {
+        return paragraphOrder;
+    }
+
+    public int getMatrixAlgoNums() {
+        keyValueMappings = StoredDataParagraphEntries.size();
+        return keyValueMappings;
+    }
+
+
+    private void addDataParagraphOrder(String token) {
+
+        StoredDataParagraphEntries.computeIfAbsent(token, key -> new int[paragraphOrder]);
+
+    }
 
     public void setCurrDataFullText(DataContainer ContainerData) {
         this.ContainerData = ContainerData;
@@ -66,7 +103,7 @@ public class DataController {
         ContainerData.setDataAllTextEntries(StoredDataAllTextEntries);
     }
 
-    public void setCurrDataParagraphs(HashMap<String, ArrayList<Integer>> StoredData) {
+    public void setCurrDataParagraphs(HashMap<String, int[]> StoredData) {
         ContainerData.setStoredDataParagraphEntries(StoredData);
     }
 
@@ -74,7 +111,7 @@ public class DataController {
         ContainerData.setStoredDataParagraphEntries(StoredDataParagraphEntries);
     }
 
-    //public void setCurrView(DataPrinter ContainerPrinter) { this.ContainerPrinter = ContainerPrinter; }
+    public void setCurrView(DataPrinter ContainerPrinter) { this.ContainerPrinter = ContainerPrinter; }
 
     public void printMatrixFullText() {
         ContainerPrinter.printContainerFullText(ContainerData.getDataFullTextEntries());
@@ -82,6 +119,10 @@ public class DataController {
 
     public void printMatrixParagraph() {
         ContainerPrinter.printContainerParagraph(ContainerData.getStoredDataParagraphEntries());
+    }
+
+    public void setDataParagraphOrder(int order) {
+        paragraphOrder = order;
     }
 
 }
