@@ -10,7 +10,7 @@ import java.util.HashMap;
  */
 public class DataContainer {
     private HashMap<String, Integer > StoredDataAllTextEntries;
-    private HashMap< String, int[] > StoredDataParagraphEntries;
+    private HashMap< String, double[] > StoredDataParagraphEntries;
 
 
     public DataContainer() {
@@ -22,7 +22,7 @@ public class DataContainer {
         StoredDataAllTextEntries = InputStoredData;
     }
 
-    public void setStoredDataParagraphEntries(HashMap<String, int[]> InputStoredData) {
+    public void setStoredDataParagraphEntries(HashMap<String, double[]> InputStoredData) {
         StoredDataParagraphEntries = InputStoredData;
     }
 
@@ -30,7 +30,7 @@ public class DataContainer {
         return StoredDataAllTextEntries;
     }
 
-    public HashMap<String, int[]> getStoredDataParagraphEntries() {
+    public HashMap<String, double[]> getStoredDataParagraphEntries() {
         return StoredDataParagraphEntries;
     }
 
