@@ -2,6 +2,8 @@ package com.view.utils;
 
 import com.controller.DataController;
 
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -11,6 +13,7 @@ import java.util.Map;
  * Created by Ivan on 17.04.2017.
  */
 public class DataPrinter {
+    private static PrintWriter pw;
 
     public void printContainerFullText(HashMap<String, Integer> matrix) {
         Iterator matrixIter = matrix.entrySet().iterator();
@@ -20,16 +23,40 @@ public class DataPrinter {
         }
     }
 
-    public void printContainerParagraph(HashMap<String, int[]> matrix) {
+    public String printContainerParagraph(HashMap<String, double[]> matrix) {
+        String result = "";
         Iterator matrixIter = matrix.entrySet().iterator();
         while(matrixIter.hasNext()) {
             HashMap.Entry pair = (HashMap.Entry)matrixIter.next();
-            int[] arr = (int[])pair.getValue();
+            double[] arr = (double[])pair.getValue();
             System.out.print(pair.getKey()+" ");
+            //result += pair.getKey()+" ";
             for(int i = 0; i < arr.length; i++) {
+                result += arr[i] + " " ;
                 System.out.print(arr[i]+" ");
             }
+            result +=  "\n";
             System.out.println();
         }
+        return result;
+    }
+
+    public static void printDataInFile(String filename, double[] data) {
+        try {
+            pw = new PrintWriter(filename);
+            for(int i = 0; i < data.length; i++) {
+                pw.println(data[i]);
+            }
+            pw.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void printComparsionVMatrix(double[] res, int Cols) {
+        for(int i = 0; i < Cols-1; i++) {
+            System.out.println(res[i]);
+        }
+        System.out.println();
     }
 }
