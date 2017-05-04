@@ -20,12 +20,13 @@ import org.ejml.data.DenseMatrix64F;
  */
 public class DataController {
     private HashMap<String, Integer > StoredDataAllTextEntries;
-    private HashMap<String, int[] > StoredDataParagraphEntries;
+    private HashMap<String, double[] > StoredDataParagraphEntries;
     private DataContainer ContainerData;
     private DataPrinter ContainerPrinter;
     private int paragraphOrder;
     private int keyValueMappings;
     double[] MainMatrix;
+    double[][] helpMainMatrix;
 
 
     public DataController() {
@@ -53,20 +54,20 @@ public class DataController {
         StoredDataParagraphEntries.get(token)[currOrder]++;
     }
 
-    private void convertDataParagraphIntoMatrix() {
 
+    private void convertDataParagraphIntoMatrix() {
+        int counter = 0;
         keyValueMappings = StoredDataParagraphEntries.size();
         MainMatrix = new double[paragraphOrder*keyValueMappings];
         Iterator matrixIter = StoredDataParagraphEntries.entrySet().iterator();
         for(int i = 0; (i < keyValueMappings) && matrixIter.hasNext(); i++) {
             HashMap.Entry pair = (HashMap.Entry)matrixIter.next();
+            double arr[] = (double[])pair.getValue();
             for(int j = 0; j < paragraphOrder; j++) {
-                int arr[] = (int[])pair.getValue();
-                MainMatrix[i] = arr[j];
+                MainMatrix[counter] = arr[j];
+                counter++;
             }
         }
-        //DenseMatrix64F matr = new DenseMatrix64F(keyValueMappings,paragraphOrder,true,MainMatrix);
-        //matr.print();
     }
 
     public double[] getMatrixAlgoData() {
@@ -86,7 +87,7 @@ public class DataController {
 
     private void addDataParagraphOrder(String token) {
 
-        StoredDataParagraphEntries.computeIfAbsent(token, key -> new int[paragraphOrder]);
+        StoredDataParagraphEntries.computeIfAbsent(token, key -> new double[paragraphOrder]);
 
     }
 
@@ -103,7 +104,7 @@ public class DataController {
         ContainerData.setDataAllTextEntries(StoredDataAllTextEntries);
     }
 
-    public void setCurrDataParagraphs(HashMap<String, int[]> StoredData) {
+    public void setCurrDataParagraphs(HashMap<String, double[]> StoredData) {
         ContainerData.setStoredDataParagraphEntries(StoredData);
     }
 
@@ -117,8 +118,8 @@ public class DataController {
         ContainerPrinter.printContainerFullText(ContainerData.getDataFullTextEntries());
     }
 
-    public void printMatrixParagraph() {
-        ContainerPrinter.printContainerParagraph(ContainerData.getStoredDataParagraphEntries());
+    public String printMatrixParagraph() {
+        return ContainerPrinter.printContainerParagraph(ContainerData.getStoredDataParagraphEntries());
     }
 
     public void setDataParagraphOrder(int order) {
