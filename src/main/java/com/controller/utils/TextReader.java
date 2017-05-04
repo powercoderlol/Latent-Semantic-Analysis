@@ -5,6 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import static com.controller.utils.Constants.OUTPUT_DIRECTORY;
+import static com.controller.utils.Constants.SOURCE_DIRECTORY;
+import static com.controller.utils.Constants.SUCCESS_CREATING_FOLDER;
+
 /**
  * Created by Ivan on 16.04.2017.
  */
@@ -14,6 +18,7 @@ public class TextReader {
     private StringTokenizer stringTokenizer;
     private boolean eof;
     private int paragraphCounter;
+    private static File[] listOfFiles;
 
     public TextReader(File currentfile) throws FileNotFoundException {
         paragraphCounter = -1;
@@ -102,10 +107,10 @@ public class TextReader {
                     order++;
                 }
             }
+            openFile(new File(filename));
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         return order;
     }
 
@@ -142,6 +147,50 @@ public class TextReader {
         return s;
     }
 
+    public static boolean checkCreateShowFolder(String folderName, boolean printContent, String checkOption) {
+        File folder = new File(folderName);
+        boolean successCreate = false;
+        boolean exitsFiles = false;
+        boolean existDir = false;
+        if(!folder.exists()) {
+            try{
+                folder.mkdir();
+                successCreate = true;
+            } catch(SecurityException securityException) {
+                securityException.getMessage();
+            } finally {
+                if (successCreate) {
+                    System.out.println(SUCCESS_CREATING_FOLDER+" "+folderName);
+                }
+            }
+        } else {
+            existDir = true;
+        }
+        listOfFiles = folder.listFiles();
+        if (printContent) {
+            if (listOfFiles.length > 0) {
+                exitsFiles = true;
+                System.out.println();
+                for (int i = 0; i < listOfFiles.length; i++) {
+                    System.out.println((i + 1) + ":" + ((listOfFiles[i].isFile()) ? " (file) " : " (directory) ") + listOfFiles[i].getName());
+                }
+                System.out.println();
+            } else {
+                System.out.println("Nothing to show.");
+            }
+        }
+        switch(checkOption.charAt(0)) {
+            case 'e': return existDir;
+            case 'f': return exitsFiles;
+            default: return existDir;
+        }
+    }
+
+    public static String getFileName(int order) {
+        order--;
+        if(!(order < 0) && !(order >= listOfFiles.length)) return listOfFiles[order].getName();
+        else return "Failed to load file with index" + (order+1);
+    }
 
 
 
