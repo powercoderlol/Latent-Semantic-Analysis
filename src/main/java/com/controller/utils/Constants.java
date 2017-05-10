@@ -15,7 +15,6 @@ public class Constants {
 
     public static final String OUTPUT_DIRECTORY = "outputFiles/";
     public static final String SOURCE_DIRECTORY = "sourceFiles/";
-    public static final String OUTPUT_DIR = "outputFiles";
 
     public static final String WELCOME_MSG = "Welcome to Latent Semantic Analysis Tools, version " + version;
     public static final String SUCCESS_CREATING_FOLDER = "New foder was created successfully.\n";
