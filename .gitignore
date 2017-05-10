@@ -10,3 +10,4 @@ gradlew.bat
 settings.gradle
 build/
 testmatrix
+sonar-project.properties
