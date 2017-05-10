@@ -156,6 +156,7 @@ public class TextReader {
             try{
                 folder.mkdir();
                 successCreate = true;
+                existDir = true;
             } catch(SecurityException securityException) {
                 securityException.getMessage();
             } finally {
