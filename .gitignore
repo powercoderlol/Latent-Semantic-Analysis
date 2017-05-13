@@ -11,3 +11,4 @@ settings.gradle
 build/
 testmatrix
 sonar-project.properties
+*.lsa
