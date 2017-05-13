@@ -54,6 +54,7 @@ public class MenuExecutor {
 
 
         subMenuEMJLLSATools.putCommand("Set file to process", () -> setFileToProcess());
+        subMenuEMJLLSATools.putCommand("Get clusterization and dendogram", () -> getClusterization());
         subMenuEMJLLSATools.putCommand("Get SVD result for paragraph in series", () -> getSvdInSeries());
         subMenuEMJLLSATools.putCommand("Get SVD result for paragraph all to all", () -> getSvdAllToAll());
         subMenuEMJLLSATools.putCommand("Print V^t main diagonal Matrix on screen", () -> printVtMatrixMainDiagonal());
@@ -77,11 +78,33 @@ public class MenuExecutor {
         }
     }
 
+    private void getClusterization() {
+        int currentFileOrder;
+        String currentFileName;
+        Scanner reader = new Scanner(System.in);
+        if(filename == null) {
+            System.out.println("Set file to process first");
+        } else {
+            try {
+                TextReader.checkCreateShowFolder(OUTPUT_DIRECTORY,true,"exist");
+                System.out.println("Set file for clusterization: ");
+                currentFileOrder = reader.nextInt();
+                currentFileName = TextReader.getFileName(currentFileOrder);
+                Process cluster = Runtime.getRuntime().exec("python scripts/cluster.py " + OUTPUT_DIRECTORY + currentFileName);
+                System.out.print("Press any key to continue...");
+                System.in.read();
+                cluster.destroy();
+            } catch (IOException e) {
+                e.getMessage();
+            }
+        }
+    }
+
     private void printVtMatrixOnScreen() {
         if(filename == null) {
             System.out.println("Set file to process first");
         } else {
-            System.out.println(lsaAlgoMachine.stringV());
+            System.out.println(lsaAlgoMachine.toString());
         }
     }
 
@@ -95,7 +118,7 @@ public class MenuExecutor {
             System.out.println("Set file to process first");
         } else {
             try ( PrintWriter writer = new PrintWriter(outputFileName)) {
-                writer.print(lsaAlgoMachine.stringV());
+                writer.print(lsaAlgoMachine.toString());
                 System.out.println("Data was successfullly printed in file "+outputFileName);
                 System.out.println("");
             } catch (IOException e) {

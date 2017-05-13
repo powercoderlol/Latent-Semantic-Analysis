@@ -190,7 +190,7 @@ public class TextReader {
     public static String getFileName(int order) {
         order--;
         if(!(order < 0) && !(order >= listOfFiles.length)) return listOfFiles[order].getName();
-        else return "Failed to load file with index" + (order+1);
+        else return "Failed to load file with index " + (order+1);
     }
 
 
