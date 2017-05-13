@@ -4,3 +4,4 @@
 - Working folders sourceFiles and outputFiles creating by program with first access
 - In last release can get main diagonal in SVD for all singular numbers between all paragraphs in text
 - For clusterization option you need Python, numpy, matplotlib and scipy
+- Example of file shows in sourceFiles folder
