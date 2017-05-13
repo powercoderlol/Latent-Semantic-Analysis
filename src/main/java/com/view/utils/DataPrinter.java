@@ -53,10 +53,15 @@ public class DataPrinter {
         }
     }
 
-    public static void printComparsionVMatrix(double[] res, int Cols) {
+    public static String printComparsionVMatrix(double[] res, int Cols, boolean onScreen) {
+        String result = "";
+        StringBuilder resultString = new StringBuilder();
         for(int i = 0; i < Cols-1; i++) {
-            System.out.println(res[i]);
+            if (onScreen) System.out.println(res[i]);
+            result = res[i] + "\n";
+            resultString.append(result);
         }
         System.out.println();
+        return resultString.toString();
     }
 }
