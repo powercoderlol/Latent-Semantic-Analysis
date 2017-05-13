@@ -67,8 +67,20 @@ public class EMJLSVD {
         return res;
     }
 
-    public String stringV() {
-        return V.toString();
+    @Override
+    public String toString() {
+        /*
+        String result = "";
+        StringBuilder sb = new StringBuilder();
+        for(int i = 0; i < Cols; i++) {
+            for(int j = 0; j < Cols; j++) {
+                sb.append(String.format(java.util.Locale.US,"%.3f ", V.get(i, j)));
+            }
+            sb.append("\n");
+        }
+        result = sb.toString().replaceAll(",", ".");
+        */
+        return V.toString().replaceAll(",",".");
     }
 
     public int getCols() { return Cols; }
