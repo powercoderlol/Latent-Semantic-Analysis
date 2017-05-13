@@ -67,11 +67,9 @@ public class EMJLSVD {
         return res;
     }
 
-    public void printV() {
-        V.print();
+    public String stringV() {
+        return V.toString();
     }
-    public void printW() { W.print(); }
-    public void printU() { U.print(); }
 
     public int getCols() { return Cols; }
 
