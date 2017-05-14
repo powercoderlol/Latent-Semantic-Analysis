@@ -22,6 +22,7 @@ import static com.controller.utils.Constants.*;
 public class MenuExecutor {
     private String filename;
     private EMJLSVD lsaAlgoMachine;
+    private Scanner reader = new Scanner(System.in);
 
 
     private Menu currentMenu;
@@ -58,8 +59,8 @@ public class MenuExecutor {
         subMenuEMJLLSATools.putCommand("Get SVD result for paragraph in series", () -> getSvdInSeries());
         subMenuEMJLLSATools.putCommand("Get SVD result for paragraph all to all", () -> getSvdAllToAll());
         subMenuEMJLLSATools.putCommand("Print V^t main diagonal Matrix on screen", () -> printVtMatrixMainDiagonal());
-        subMenuEMJLLSATools.putCommand("Print V^t Matrix on screen", () -> printVtMatrixOnScreen());
-        subMenuEMJLLSATools.putCommand("Print V^t Matrix in file", () -> printVtMatrixInFile());
+        subMenuEMJLLSATools.putCommand("Print Matrix on screen", () -> printMatrixOnScreen());
+        subMenuEMJLLSATools.putCommand("Print Matrix in file", () -> printMatrixInFile());
         subMenuEMJLLSATools.putCommand("Return to LSA tools menu", () -> activateMenu(subMenuEMJLLSA));
         subMenuEMJLLSATools.putCommand("Return to Main Menu", () -> activateMenu(currentMenu));
         subMenuEMJLLSATools.putCommand("Quit", ()-> System.exit(0));
@@ -100,27 +101,33 @@ public class MenuExecutor {
         }
     }
 
-    private void printVtMatrixOnScreen() {
+    private void printMatrixOnScreen() {
+        String name = "";
         if(filename == null) {
             System.out.println("Set file to process first");
         } else {
-            System.out.println(lsaAlgoMachine.toString());
+            System.out.print("Matrix option for print: ");
+            name = reader.next();
+            System.out.println(lsaAlgoMachine.toString(name));
         }
     }
 
-    private void printVtMatrixInFile() {
+    private void printMatrixInFile() {
         Date currentDate;
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy'_T_'HH-mm-ss");
         currentDate = new Date();
         String buffDate = sdf.format(currentDate);
-        String outputFileName = OUTPUT_DIRECTORY + "Vt matrix data " + buffDate + ".lsa";
+        String outputFileName = OUTPUT_DIRECTORY + "matrix data " + buffDate + ".lsa";
         if(filename == null) {
             System.out.println("Set file to process first");
         } else {
             try ( PrintWriter writer = new PrintWriter(outputFileName)) {
-                writer.print(lsaAlgoMachine.toString());
+                System.out.print("Matrix option for print: ");
+                String name = reader.next();
+                writer.print(lsaAlgoMachine.toString(name));
                 System.out.println("Data was successfullly printed in file "+outputFileName);
                 System.out.println("");
+                writer.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
