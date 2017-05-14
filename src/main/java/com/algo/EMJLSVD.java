@@ -67,21 +67,21 @@ public class EMJLSVD {
         return res;
     }
 
-    @Override
-    public String toString() {
-        /*
+    public String toString(String name) {
         String result = "";
-        StringBuilder sb = new StringBuilder();
-        for(int i = 0; i < Cols; i++) {
-            for(int j = 0; j < Cols; j++) {
-                sb.append(String.format(java.util.Locale.US,"%.3f ", V.get(i, j)));
-            }
-            sb.append("\n");
+        switch (name.charAt(0)) {
+            case 'V':   result = V.toString();
+                        break;
+            case 'U':   result = U.toString();
+                        break;
+            case 'W':   result = W.toString();
+                        break;
+            default:    result = V.toString();
+                        break;
         }
-        result = sb.toString().replaceAll(",", ".");
-        */
-        return V.toString().replaceAll(",",".");
+        return result.replaceAll(",", ".");
     }
+
 
     public int getCols() { return Cols; }
 
