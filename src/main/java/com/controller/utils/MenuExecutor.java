@@ -1,19 +1,8 @@
 package com.controller.utils;
 
-import com.controller.DataController;
-import com.view.utils.DataPrinter;
-
 import com.algo.EMJLSVD;
 
-import javax.xml.soap.Text;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.text.SimpleDateFormat;
 import java.util.Scanner;
-import java.util.Date;
-
 
 import static com.controller.utils.Constants.*;
 
@@ -21,10 +10,6 @@ import static com.controller.utils.Constants.*;
  * Created by Ivan on 02.05.2017.
  */
 public class MenuExecutor {
-    private String filename;
-    private EMJLSVD lsaAlgoMachine;
-    private Scanner reader = new Scanner(System.in);
-
 
     private Menu currentMenu;
 
@@ -79,32 +64,6 @@ public class MenuExecutor {
         }
     }
 
-    private void getClusterization() {
-        TextReaderWriter.getClusterization();
-    }
-
-    private void printMatrixOnScreen() {
-        TextReaderWriter.printMatrixOnScreen();
-    }
-
-    private void printMatrixInFile() {
-        TextReaderWriter.printMatrixInFile();
-    }
-
-    private void getSvdInSeries() {
-        TextReaderWriter.getSvdInSeries();
-    }
-
-    private void getSvdAllToAll() {
-        TextReaderWriter.getSvdAllToAll();
-    }
-
-    private void printVtMatrixMainDiagonal() {
-        TextReaderWriter.printVtMatrixMainDiagonal();
-    }
-
-    private void setFileToProcess() {
-        TextReaderWriter.setFileToProcess();
-    }
+    
 
 }
