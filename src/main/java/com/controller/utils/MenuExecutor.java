@@ -5,6 +5,7 @@ import com.view.utils.DataPrinter;
 
 import com.algo.EMJLSVD;
 
+import javax.xml.soap.Text;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -48,19 +49,18 @@ public class MenuExecutor {
         subMenuEMJLLSA.putCommand("Return to Main Menu", () -> activateMenu(currentMenu));
         subMenuEMJLLSA.putCommand("Quit", () -> System.exit(0));
 
-        subMenuFilesJob.putCommand("Show files in source dir", () -> TextReader.checkCreateShowFolder(SOURCE_DIRECTORY, true, "exist"));
-        subMenuFilesJob.putCommand("Show files in output dir", () -> TextReader.checkCreateShowFolder(OUTPUT_DIRECTORY, true, "exist"));
+        subMenuFilesJob.putCommand("Show files in output dir", () -> TextReaderWriter.checkCreateShowFolder(OUTPUT_DIRECTORY, true, "exist"));
         subMenuFilesJob.putCommand("Return to Main Menu", () -> activateMenu(currentMenu));
         subMenuFilesJob.putCommand("Quit", ()-> System.exit(0));
 
 
-        subMenuEMJLLSATools.putCommand("Set file to process", () -> setFileToProcess());
-        subMenuEMJLLSATools.putCommand("Get clusterization and dendogram", () -> getClusterization());
-        subMenuEMJLLSATools.putCommand("Get SVD result for paragraph in series", () -> getSvdInSeries());
-        subMenuEMJLLSATools.putCommand("Get SVD result for paragraph all to all", () -> getSvdAllToAll());
-        subMenuEMJLLSATools.putCommand("Print V^t main diagonal Matrix on screen", () -> printVtMatrixMainDiagonal());
-        subMenuEMJLLSATools.putCommand("Print Matrix on screen", () -> printMatrixOnScreen());
-        subMenuEMJLLSATools.putCommand("Print Matrix in file", () -> printMatrixInFile());
+        subMenuEMJLLSATools.putCommand("Set file to process", TextReaderWriter::setFileToProcess);
+        subMenuEMJLLSATools.putCommand("Get clusterization and dendogram", TextReaderWriter::getClusterization);
+        subMenuEMJLLSATools.putCommand("Get SVD result for paragraph in series", TextReaderWriter::getSvdInSeries);
+        subMenuEMJLLSATools.putCommand("Get SVD result for paragraph all to all", TextReaderWriter::getSvdAllToAll);
+        subMenuEMJLLSATools.putCommand("Print V^t main diagonal Matrix on screen", TextReaderWriter::printVtMatrixMainDiagonal);
+        subMenuEMJLLSATools.putCommand("Print Matrix on screen", TextReaderWriter::printMatrixOnScreen);
+        subMenuEMJLLSATools.putCommand("Print Matrix in file", TextReaderWriter::printMatrixInFile);
         subMenuEMJLLSATools.putCommand("Return to LSA tools menu", () -> activateMenu(subMenuEMJLLSA));
         subMenuEMJLLSATools.putCommand("Return to Main Menu", () -> activateMenu(currentMenu));
         subMenuEMJLLSATools.putCommand("Quit", ()-> System.exit(0));
@@ -80,140 +80,31 @@ public class MenuExecutor {
     }
 
     private void getClusterization() {
-        int currentFileOrder;
-        String currentFileName;
-        Scanner reader = new Scanner(System.in);
-        if(filename == null) {
-            System.out.println("Set file to process first");
-        } else {
-            try {
-                TextReader.checkCreateShowFolder(OUTPUT_DIRECTORY,true,"exist");
-                System.out.println("Set file for clusterization: ");
-                currentFileOrder = reader.nextInt();
-                currentFileName = TextReader.getFileName(currentFileOrder);
-                Process cluster = Runtime.getRuntime().exec("python scripts/cluster.py " + OUTPUT_DIRECTORY + currentFileName);
-                System.out.print("Press any key to continue...");
-                System.in.read();
-                cluster.destroy();
-            } catch (IOException e) {
-                e.getMessage();
-            }
-        }
+        TextReaderWriter.getClusterization();
     }
 
     private void printMatrixOnScreen() {
-        String name = "";
-        if(filename == null) {
-            System.out.println("Set file to process first");
-        } else {
-            System.out.print("Matrix option for print: ");
-            name = reader.next();
-            System.out.println(lsaAlgoMachine.toString(name));
-        }
+        TextReaderWriter.printMatrixOnScreen();
     }
 
     private void printMatrixInFile() {
-        Date currentDate;
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy'_T_'HH-mm-ss");
-        currentDate = new Date();
-        String buffDate = sdf.format(currentDate);
-        String outputFileName = OUTPUT_DIRECTORY + "matrix data " + buffDate + ".lsa";
-        if(filename == null) {
-            System.out.println("Set file to process first");
-        } else {
-            try ( PrintWriter writer = new PrintWriter(outputFileName)) {
-                System.out.print("Matrix option for print: ");
-                String name = reader.next();
-                writer.print(lsaAlgoMachine.toString(name));
-                System.out.println("Data was successfullly printed in file "+outputFileName);
-                System.out.println("");
-                writer.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+        TextReaderWriter.printMatrixInFile();
     }
 
     private void getSvdInSeries() {
-        String outputFileName, buffFileName, buffDate;
-        Date currentDate;
-        if (filename == null) {
-            System.out.println("Set file to process first");
-        } else {
-            if (TextReader.checkCreateShowFolder(OUTPUT_DIRECTORY, false, "exist")) {
-                SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy'_T_'HH-mm-ss");
-                currentDate = new Date();
-                buffDate = sdf.format(currentDate);
-                buffFileName = filename.substring(SOURCE_DIRECTORY.length(),filename.length()-4);
-                outputFileName = OUTPUT_DIRECTORY + "SVD comparsion in series " + buffFileName + " " + buffDate + ".txt";
-                DataPrinter.printComparsionVMatrix(lsaAlgoMachine.getComparsion(), lsaAlgoMachine.getCols(), true);
-                DataPrinter.printDataInFile(outputFileName, lsaAlgoMachine.getComparsion());
-            }
-        }
+        TextReaderWriter.getSvdInSeries();
     }
 
     private void getSvdAllToAll() {
-        String outputDirName, buffDate, buffFileName;
-        Date currentDate;
-        SimpleDateFormat sdf;
-        DataController dc;
-        if (filename == null) {
-            System.out.println("Set file to process first");
-        } else {
-            if (TextReader.checkCreateShowFolder(OUTPUT_DIRECTORY, false, "exist")) {
-                System.out.println("Calculation in progress...");
-                sdf = new SimpleDateFormat("dd-MM-yyyy_'T'_HH-mm-ss");
-                currentDate = new Date();
-                buffDate = sdf.format(currentDate);
-                buffFileName = filename.substring(SOURCE_DIRECTORY.length(), filename.length()-4);
-                outputDirName = OUTPUT_DIRECTORY + "SVD comparsion all to all " + buffFileName + " " + buffDate + "/";
-                if(TextReader.checkCreateShowFolder(outputDirName, false, "exist")) {
-                    for(int i = 0; i < lsaAlgoMachine.getCols(); i++) {
-                        buffFileName = outputDirName + (i+1) + " paragraph.txt";
-                        DataPrinter.printDataInFile(buffFileName, lsaAlgoMachine.getComparsionAll(i));
-                    }
-                }
-                System.out.println("Done! See files with data in " + outputDirName + " directiry");
-            }
-        }
-
+        TextReaderWriter.getSvdAllToAll();
     }
 
     private void printVtMatrixMainDiagonal() {
-        if(filename == null) {
-            System.out.println("Set file to process first");
-        } else {
-            DataPrinter.printComparsionVMatrix(lsaAlgoMachine.getComparsion(), lsaAlgoMachine.getCols(), true);
-        }
+        TextReaderWriter.printVtMatrixMainDiagonal();
     }
 
     private void setFileToProcess() {
-        int mainParagraphOrder;
-        String line;
-        TextReader tr;
-        DataController dc = new DataController();
-        Scanner commandReader = new Scanner(System.in);
-        if( TextReader.checkCreateShowFolder(SOURCE_DIRECTORY, true, "files") ) {
-            System.out.print("Choose file by index: ");
-            int fileNumber = commandReader.nextInt();
-            System.out.println("File in process...");
-            try {
-                filename = SOURCE_DIRECTORY+TextReader.getFileName(fileNumber);
-                tr = new TextReader(new File(filename));
-                mainParagraphOrder = tr.getParagraphOrder(filename);
-                dc.setDataParagraphOrder(mainParagraphOrder);
-                while(!(line = tr.nextParagraphToken()).equals("") )  {
-                    mainParagraphOrder = tr.getParagraphCounter();
-                    dc.addDataParagraph(line, mainParagraphOrder);
-                }
-                lsaAlgoMachine = new EMJLSVD(dc.getMatrixAlgoCols(), dc.getMatrixAlgoNums(), dc.getMatrixAlgoData());
-                System.out.println("Done!\n");
-            } catch (FileNotFoundException e) {
-                e.getMessage();
-            }
-        } else {
-            System.out.println("Nothing to process.");
-        }
+        TextReaderWriter.setFileToProcess();
     }
 
 }
