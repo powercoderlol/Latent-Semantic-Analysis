@@ -1,0 +1,27 @@
+plugins {
+    id "org.sonarqube" version "2.2"
+}
+
+group 'LSA'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+plugins {
+    id "org.sonarqube" version "2.4"
+}
+
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    compile group: 'org.ejml', name: 'all', version: '0.30'
+    compile group: 'org.jfree', name: 'jfreechart', version: '1.0.19'
+    compile group: 'gov.nist.math', name: 'jama', version: '1.0.2'
+}
+
